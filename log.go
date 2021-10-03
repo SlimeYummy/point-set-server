@@ -14,11 +14,11 @@ const (
 )
 
 func LogError(roomId string, playerId string, conv uint32, args ...interface{}) {
-	logPrint(levelError, roomId, playerId, conv, args)
+	logPrint(levelError, roomId, playerId, conv, args...)
 }
 
 func LogWran(roomId string, playerId string, conv uint32, args ...interface{}) {
-	logPrint(levelWarn, roomId, playerId, conv, args)
+	logPrint(levelWarn, roomId, playerId, conv, args...)
 }
 
 func LogInfo(roomId string, playerId string, conv uint32, args ...interface{}) {
