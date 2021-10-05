@@ -1,0 +1,27 @@
+syntax = "proto3";
+package msg;
+
+option go_package = "./msg";
+
+enum Type {
+  Unknown = 0;
+  Init = 1;
+  Error = 2;
+  Data = 3;
+  Start = 4;
+  Finish = 5;
+}
+
+message MsgInit {
+  string room_id = 1;
+  string player_id = 2;
+  string password = 3;
+}
+
+message MsgError { string cause = 1; }
+
+message MsgData { bytes data = 1; }
+
+message MsgStart {}
+
+message MsgFinish {}
