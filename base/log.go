@@ -1,4 +1,4 @@
-package main
+package base
 
 import (
 	"fmt"
@@ -17,24 +17,12 @@ func LogError(roomId string, playerId string, conv uint32, args ...interface{}) 
 	logPrint(levelError, roomId, playerId, conv, args...)
 }
 
-func LogWran(roomId string, playerId string, conv uint32, args ...interface{}) {
+func LogWarn(roomId string, playerId string, conv uint32, args ...interface{}) {
 	logPrint(levelWarn, roomId, playerId, conv, args...)
 }
 
 func LogInfo(roomId string, playerId string, conv uint32, args ...interface{}) {
 	logPrint(levelInfo, roomId, playerId, conv, args...)
-}
-
-func LogPlayerError(p *Player, args ...interface{}) {
-	logPrint(levelError, p.room.id, p.playerId, p.session.GetConv(), args...)
-}
-
-func LogPlayerWarn(p *Player, args ...interface{}) {
-	logPrint(levelWarn, p.room.id, p.playerId, p.session.GetConv(), args...)
-}
-
-func LogPlayerInfo(p *Player, args ...interface{}) {
-	logPrint(levelInfo, p.room.id, p.playerId, p.session.GetConv(), args...)
 }
 
 type errorTracer interface {
