@@ -10,8 +10,8 @@ const (
 	KCPWindowSize = 160 // 16 seconds
 	KCPMtx        = 470
 
-	FPS = 10
-
+	FPS           = 10
+	TickTimeout   = time.Millisecond * 200
 	JoinTimeout   = time.Second * 30
 	MinPacketSize = 5
 	MaxPacketSize = KCPMtx * 3
