@@ -8,21 +8,33 @@ import (
 )
 
 const (
-	levelError = 1
-	levelWarn  = 2
-	levelInfo  = 3
+	LevelError = 1
+	LevelWarn  = 2
+	LevelInfo  = 3
 )
 
 func LogError(roomId string, playerId string, conv uint32, args ...interface{}) {
-	logPrint(levelError, roomId, playerId, conv, args...)
+	LogPrint(LevelError, map[string]interface{}{
+		"room_id":   roomId,
+		"player_id": playerId,
+		"conv":      conv,
+	}, args...)
 }
 
 func LogWarn(roomId string, playerId string, conv uint32, args ...interface{}) {
-	logPrint(levelWarn, roomId, playerId, conv, args...)
+	LogPrint(LevelWarn, map[string]interface{}{
+		"room_id":   roomId,
+		"player_id": playerId,
+		"conv":      conv,
+	}, args...)
 }
 
 func LogInfo(roomId string, playerId string, conv uint32, args ...interface{}) {
-	logPrint(levelInfo, roomId, playerId, conv, args...)
+	LogPrint(LevelInfo, map[string]interface{}{
+		"room_id":   roomId,
+		"player_id": playerId,
+		"conv":      conv,
+	}, args...)
 }
 
 type errorTracer interface {
@@ -30,18 +42,7 @@ type errorTracer interface {
 	StackTrace() errors.StackTrace
 }
 
-func logPrint(level int, roomId string, playerId string, conv uint32, args ...interface{}) {
-	fields := log.Fields{}
-	if roomId != "" {
-		fields["room_id"] = roomId
-	}
-	if playerId != "" {
-		fields["player_id"] = playerId
-	}
-	if conv != 0 {
-		fields["conv"] = conv
-	}
-
+func LogPrint(level int, fields log.Fields, args ...interface{}) {
 	if len(args) == 1 {
 		if err, ok := args[0].(errorTracer); ok {
 			frames := err.StackTrace()
@@ -52,11 +53,11 @@ func logPrint(level int, roomId string, playerId string, conv uint32, args ...in
 			fields["stack"] = stack
 
 			switch level {
-			case levelError:
+			case LevelError:
 				log.WithFields(fields).Error(err.Error())
-			case levelWarn:
+			case LevelWarn:
 				log.WithFields(fields).Warn(err.Error())
-			case levelInfo:
+			case LevelInfo:
 				log.WithFields(fields).Info(err.Error())
 			}
 			return
@@ -64,11 +65,11 @@ func logPrint(level int, roomId string, playerId string, conv uint32, args ...in
 	}
 
 	switch level {
-	case levelError:
+	case LevelError:
 		log.WithFields(fields).Error(fmt.Sprint(args...))
-	case levelWarn:
+	case LevelWarn:
 		log.WithFields(fields).Warn(fmt.Sprint(args...))
-	case levelInfo:
+	case LevelInfo:
 		log.WithFields(fields).Info(fmt.Sprint(args...))
 	}
 }
