@@ -13,29 +13,7 @@ const (
 	LevelInfo  = 3
 )
 
-func LogError(roomId string, playerId string, conv uint32, args ...interface{}) {
-	LogPrint(LevelError, map[string]interface{}{
-		"room_id":   roomId,
-		"player_id": playerId,
-		"conv":      conv,
-	}, args...)
-}
-
-func LogWarn(roomId string, playerId string, conv uint32, args ...interface{}) {
-	LogPrint(LevelWarn, map[string]interface{}{
-		"room_id":   roomId,
-		"player_id": playerId,
-		"conv":      conv,
-	}, args...)
-}
-
-func LogInfo(roomId string, playerId string, conv uint32, args ...interface{}) {
-	LogPrint(LevelInfo, map[string]interface{}{
-		"room_id":   roomId,
-		"player_id": playerId,
-		"conv":      conv,
-	}, args...)
-}
+type LogFields = log.Fields
 
 type errorTracer interface {
 	Error() string
