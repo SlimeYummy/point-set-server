@@ -1,39 +1,65 @@
 package base
 
 import (
+	"os"
 	"time"
 
 	"github.com/pkg/errors"
 )
 
 const (
-	KCPWindowSize = 160 // 16 seconds
+	KCPWindowSize = 256
 	KCPMtx        = 470
 
 	FPS           = 10
-	TickTimeout   = time.Millisecond * 200
-	JoinTimeout   = time.Second * 30
-	MinPacketSize = 5
-	MaxPacketSize = KCPMtx * 3
-	SyncLowLimit  = time.Second * 5 // 5 seconds
-	SyncHighLimit = time.Second * 2 // 2 seconds
+	MinPacketSize = 3
+	MaxPacketSize = KCPMtx * 4
+)
+
+var TimeZero = time.Time{}
+
+const (
+	ListenTimeout  = time.Second * 5
+	ConnectTimeout = time.Second * 10
+	StartTimeout   = time.Second * 20
+	SyncLowLimit   = time.Second * 5
+	SyncHighLimit  = time.Second * 2
 )
 
 var (
-	ErrUnexpected  = errors.New("Unexpected error")
-	ErrOverflow    = errors.New("Overflow error")
-	ErrShortPacket = errors.New("Packet too short")
-	ErrLogPacket   = errors.New("Packet too long")
-	ErrBadType     = errors.New("Bad type")
+	ErrUnexpected = errors.New("unexpected error")
+	ErrArguments  = errors.New("invalid arguments")
 
-	ErrRoomNotFound = errors.New("Room not found")
-	ErrRoomExisted  = errors.New("Room existed")
-	ErrRoomStarted  = errors.New("Room started")
+	ErrMessageType = errors.New("invalid message type") // local message/packet
+	ErrMessageSize = errors.New("invalid message size") // local message/packet
 
-	ErrPlayerNotFound  = errors.New("Player not found")
-	ErrPlayerExisted   = errors.New("Player existed")
-	ErrPlayerStart     = errors.New("Player start failed")
-	ErrPlayerStop      = errors.New("Player stop failed")
-	ErrInvalidPassword = errors.New("Invalid password")
-	ErrInvalidConv     = errors.New("Invalid conv")
+	ErrRoomNotFound = errors.New("room not found")
+	ErrRoomExisted  = errors.New("room existed")
+	ErrRoomState    = errors.New("invalid room state")
+
+	ErrPlayerNotFound = errors.New("player not found")
+	ErrPlayerExisted  = errors.New("player existed")
+
+	// bad packet
+	ErrPacketBroken = errors.New("packet is broken")    // remote message/packet
+	ErrPacketSize   = errors.New("invalid packet size") // remote message/packet
+
+	// auth failed
+	ErrAuthFailed = errors.New("authorization failed")
+
+	// time out of sync
+	ErrTimeOutOfSync = errors.New("time out of sync")
+
+	// data out of sync
+	ErrDataOutOfSync = errors.New("data out of sync")
+
+	// other
+	ErrRemoteFinish = errors.New("remote finish")
+	ErrLocalFinish  = errors.New("local finish")
 )
+
+var InUnitTest = false
+
+func init() {
+	InUnitTest = os.Getenv("UNIT_TEST") != ""
+}
