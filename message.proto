@@ -1,0 +1,62 @@
+syntax = "proto3";
+option go_package = "./message";
+
+enum NetType {
+  Unknown = 0;
+  Connect = 1;
+  Accept = 2;
+  State = 3;
+  Start = 4;
+  Finish = 5;
+  Command = 6;
+  Hash = 7;
+}
+
+message NetConnect {
+  string room_id = 1;
+  string player_id = 2;
+  string password = 3;
+}
+
+message NetAccept {}
+
+message NetState {
+  uint32 conv = 1;
+  NetPlayerState state = 2;
+}
+
+enum NetPlayerState {
+  Initing = 0;
+  Waiting = 1;
+  Running = 2;
+  Stopped = 3;
+}
+
+message NetStart {}
+
+message NetFinish {
+  uint32 frame = 1;
+  NetFinishCause cause = 2;
+}
+
+enum NetFinishCause {
+  GameOver = 0;
+  NetworkBroken = 1;
+  InvalidPacket = 2;
+  AuthFailed = 3;
+  TimeOutOfSync = 4;
+  DataOutOfSync = 5;
+  OtherPlayer = 6;
+  ServerError = 7;
+  ClientError = 8;
+}
+
+message NetCommand {
+  uint32 frame = 1;
+  uint32 conv = 2;
+}
+
+message NetHash {
+  uint32 frame = 1;
+  bytes hash = 2;
+}
