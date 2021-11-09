@@ -11,6 +11,7 @@ const (
 	LevelError = 1
 	LevelWarn  = 2
 	LevelInfo  = 3
+	LevelDebug = 4
 )
 
 type LogFields = log.Fields
@@ -21,10 +22,14 @@ type errorTracer interface {
 }
 
 func LogPrint(level int, fields log.Fields, args ...interface{}) {
+	if fields == nil {
+		fields = LogFields{}
+	}
+
 	if len(args) == 1 {
 		if err, ok := args[0].(errorTracer); ok {
 			frames := err.StackTrace()
-			stack := make([]string, len(frames))
+			stack := make([]string, 0, len(frames))
 			for _, frame := range frames {
 				stack = append(stack, fmt.Sprintf("%+s:%d\n", frame, frame))
 			}
@@ -49,5 +54,7 @@ func LogPrint(level int, fields log.Fields, args ...interface{}) {
 		log.WithFields(fields).Warn(fmt.Sprint(args...))
 	case LevelInfo:
 		log.WithFields(fields).Info(fmt.Sprint(args...))
+	case LevelDebug:
+		log.WithFields(fields).Debug(fmt.Sprint(args...))
 	}
 }
