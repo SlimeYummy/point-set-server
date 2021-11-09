@@ -40,7 +40,10 @@ var (
 	ErrPlayerNotFound = errors.New("player not found")
 	ErrPlayerExisted  = errors.New("player existed")
 
-	// bad packet
+	// network borken
+	ErrNetworkBroken = errors.New("network broken")
+
+	// invalid packet
 	ErrPacketBroken = errors.New("packet is broken")    // remote message/packet
 	ErrPacketSize   = errors.New("invalid packet size") // remote message/packet
 
@@ -59,7 +62,9 @@ var (
 )
 
 var InUnitTest = false
+var InDebug = false
 
 func init() {
 	InUnitTest = os.Getenv("UNIT_TEST") != ""
+	InDebug = os.Getenv("DEBUG") != ""
 }
